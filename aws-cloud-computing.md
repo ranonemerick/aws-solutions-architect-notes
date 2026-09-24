@@ -112,3 +112,203 @@ A capacidade do sistema de crescer ou encolher para atender à demanda. Na prova
 A transição do On-Site para o SaaS representa a transferência de "dor de cabeça" (gerenciamento) do Cliente para o Provedor de Nuvem. No IaaS você tem controle total, mas trabalha mais. No SaaS, você não tem trabalho de infraestrutura, mas perde o controle do que roda por baixo.
 
 ![Modelo de Responsabilidade Compartilhada](assets/RESPONSIBILITY-MODEL.png)
+
+
+# ☁️ Cloud Computing - Aula 04: Modelos de Implantação (Deployment Models)
+
+> 💡 **Foco SAA-C03 (Cenário Clássico):** A prova adora explorar a **Nuvem Híbrida**. Geralmente, a questão descreve uma empresa com um banco de dados legado, dados ultrassecretos ou regras de compliance severas que *"não permitem que os dados saiam do prédio"*, mas eles querem usar a nuvem para suportar picos de acesso no site. A resposta envolverá sempre uma arquitetura Híbrida (conectando o local físico à AWS de forma segura).
+
+## 🌍 1. Public Cloud (Nuvem Pública)
+- **O que é:** Os serviços em nuvem são fornecidos por um provedor terceirizado (como a própria AWS, Azure ou Google Cloud) e disponibilizados para qualquer pessoa pela internet.
+- **Características:** 
+  - **Multitenancy (Múltiplos Inquilinos):** Você compartilha o mesmo hardware físico com milhares de outras empresas (embora os seus dados sejam isolados logicamente de forma segura).
+  - Sem necessidade de investimento inicial em infraestrutura (Zero CapEx).
+  - Escalabilidade virtualmente infinita e modelo 100% *Pay-as-you-go*.
+- **Uso:** Startups, aplicações web globais, Big Data, e-commerce, empresas que nasceram digitais.
+
+---
+
+## 🏢 2. Private Cloud (Nuvem Privada / On-Premises)
+- **O que é:** A infraestrutura de nuvem é operada exclusivamente por (e para) **uma única organização**. Pode estar localizada fisicamente no data center da própria empresa (On-Premises) ou hospedada por terceiros, mas a rede é totalmente dedicada.
+- **Características:**
+  - **Single-tenant (Inquilino Único):** O hardware não é compartilhado com ninguém.
+  - Controle e personalização absolutos sobre a segurança, servidores e rede.
+  - Custo altíssimo de manutenção (CapEx e mão de obra).
+- **Uso:** Bancos, instituições governamentais, hospitais ou empresas com regras de conformidade (Compliance) extremamente rígidas que não confiam ou não têm permissão legal para colocar dados na nuvem pública.
+
+---
+
+## 🌉 3. Hybrid Cloud (Nuvem Híbrida)
+- **O que é:** É a combinação das duas nuvens (Pública + Privada), ligadas por uma tecnologia padronizada (como *AWS Direct Connect* ou *VPN*) que permite o compartilhamento seguro de dados e aplicativos entre elas.
+- **Características:**
+  - Mantém o controle rígido sobre dados sensíveis (ficam na Nuvem Privada).
+  - Usa a elasticidade da AWS para suportar picos de processamento (ficam na Nuvem Pública).
+- **Exemplo Prático de Prova (Cloud Bursting):** 
+  - Uma empresa mantém seu servidor web e banco de dados rodando em seu Data Center local (Privada).
+  - Durante a Black Friday, a capacidade local esgota. O sistema é configurado para "transbordar" automaticamente o tráfego excedente para novas instâncias EC2 na AWS (Pública). 
+  - Quando o evento acaba, a AWS é desligada e a empresa volta a usar apenas seu servidor local.
+
+# ☁️ Cloud Computing - Aula 05: Os Principais Serviços AWS (Mapa SAA-C03)
+
+> 💡 **Dica de Prova:** Você não precisa conhecer os 200+ serviços da AWS. A certificação SAA-C03 exige que você saiba categorizar e escolher o serviço certo para o problema certo. Decore as palavras-chave de cada um!
+
+## 🖥️ 1. Computação (Compute)
+Onde o processamento acontece (os "cérebros").
+- **Amazon EC2:** Servidores virtuais na nuvem (IaaS). Máquinas flexíveis para qualquer uso.
+- **AWS Lambda:** Computação *Serverless* (Sem servidor). Roda código apenas quando um evento acontece. Cobrado por milissegundo.
+- **Amazon ECS / EKS:** Orquestração de **Contêineres** (Docker). ECS é o nativo da AWS, EKS é o Kubernetes gerenciado.
+- **AWS Elastic Beanstalk:** Serviço PaaS para fazer deploy rápido de aplicações web (você foca no código, ele provisiona os servidores e balanceadores).
+
+## 🗄️ 2. Armazenamento (Storage)
+Onde os arquivos e discos vivem.
+- **Amazon S3:** Armazenamento de **Objetos**. Escala infinita, backups, sites estáticos e Big Data.
+- **Amazon EBS:** Armazenamento em **Blocos**. É o "disco rígido" (SSD/HDD) conectado na sua instância EC2.
+- **Amazon EFS:** Sistema de **Arquivos** de rede elástico (NFS). Pode ser montado em centenas de instâncias EC2 ao mesmo tempo (apenas Linux).
+- **AWS Storage Gateway:** Conecta a infraestrutura On-Premises ao S3 (Nuvem Híbrida).
+
+## 🗃️ 3. Bancos de Dados (Databases)
+- **Amazon RDS:** Bancos de dados **Relacionais** SQL gerenciados (MySQL, PostgreSQL, Oracle, SQL Server).
+- **Amazon Aurora:** Banco relacional criado pela AWS. 5x mais rápido que MySQL tradicional, altamente disponível.
+- **Amazon DynamoDB:** Banco de dados **NoSQL** (Chave-Valor) *Serverless*. Latência de milissegundos, não importa o tamanho.
+- **Amazon ElastiCache:** Banco de dados em **Memória** (Redis ou Memcached). Usado para aliviar consultas repetitivas no banco principal (Cache).
+
+## 🌐 4. Redes e Entrega de Conteúdo (Networking)
+- **Amazon VPC:** A sua rede privada virtual na nuvem. Onde você define sub-redes, IPs e gateways.
+- **Amazon Route 53:** Serviço de **DNS** altamente escalável. Faz o roteamento do seu domínio (ex: `meusite.com`) para a AWS.
+- **Amazon CloudFront:** Serviço de **CDN** (Content Delivery Network). Faz cache de imagens, vídeos e APIs em pontos de presença globais (Edge Locations) para entregar rápido ao usuário final.
+- **Elastic Load Balancing (ELB):** Distribui o tráfego de entrada automaticamente entre várias instâncias EC2 saudáveis.
+
+## 🔒 5. Segurança, Identidade e Conformidade
+- **AWS IAM (Identity and Access Management):** Controle de quem pode entrar na AWS (Usuários/Grupos) e o que eles podem fazer (Políticas/Roles).
+- **AWS KMS (Key Management Service):** Criação e gerenciamento das **Chaves de Criptografia**.
+- **AWS WAF / Shield:** WAF protege contra ataques de camada de aplicação (SQL Injection). Shield protege contra ataques **DDoS** (Negação de Serviço).
+
+## 🔗 6. Integração de Aplicações e Mensageria
+Desacopla as camadas da sua arquitetura.
+- **Amazon SQS:** Serviço de **Filas** de mensagens. Um servidor manda a tarefa para a fila, o outro puxa a tarefa quando puder.
+- **Amazon SNS:** Serviço de **Notificações/Publicação**. Envia alertas via E-mail, SMS ou HTTP (Pub/Sub).
+
+## 📊 7. Gerenciamento e Governança
+- **Amazon CloudWatch:** Monitoramento de **Performance**. Fica de olho no uso de CPU, memória e cria alarmes (ex: disparar o Auto Scaling se a CPU passar de 80%).
+- **AWS CloudTrail:** Monitoramento de **Auditoria/API**. Registra "Quem fez o que, quando e onde" dentro da conta AWS.
+
+# ☁️ Cloud Computing - Aula 06: Modelo de Responsabilidade Compartilhada (Shared Responsibility Model)
+
+> 💡 **Foco SAA-C03:** A AWS ama testar esse conceito com cenários de falha de segurança. Se um hacker invadir uma instância EC2 porque a porta 22 estava aberta para o mundo, a culpa é do cliente. Se o data center físico pegar fogo ou um disco rígido físico queimar, a responsabilidade de manter a infraestrutura rodando é da AWS. 
+
+## ⚖️ O que é o Modelo de Responsabilidade Compartilhada?
+A segurança e a conformidade na nuvem não são tarefas exclusivas da AWS, mas sim uma responsabilidade dividida entre a AWS e o Cliente. 
+
+A regra básica cobrada no exame divide a segurança em duas frases essenciais:
+
+### 🟧 Responsabilidade da AWS: Segurança DA Nuvem (Security OF the Cloud)
+A AWS é responsável por proteger e manter a infraestrutura global que executa todos os serviços oferecidos.
+- **Infraestrutura Global:** Regiões (Regions), Zonas de Disponibilidade (AZs) e Pontos de Presença (Edge Locations).
+- **Segurança Física:** Câmeras, seguranças armados, controle de acesso biométrico nos data centers físicos.
+- **Hardware Base:** Cabeamento de rede, energia elétrica, refrigeração, troca de peças físicas.
+- **Virtualização (Hypervisor):** O software de baixo nível que isola as máquinas virtuais de diferentes clientes no mesmo servidor físico.
+
+### 🟦 Responsabilidade do Cliente: Segurança NA Nuvem (Security IN the Cloud)
+O cliente é responsável por tudo o que ele implanta, coloca ou conecta dentro da nuvem.
+- **Dados do Cliente (Customer Data):** Você é o único dono dos seus dados.
+- **Gerenciamento de Identidade (IAM):** Criar senhas fortes, exigir MFA (Autenticação em duas etapas) e gerenciar permissões restritas de quem acessa o quê.
+- **Sistemas Operacionais e Patches:** Em serviços IaaS como o **EC2**, é **VOCÊ** quem deve instalar os patches de segurança do Windows ou Linux. A AWS não toca no seu SO.
+- **Configuração de Rede e Firewall:** É sua obrigação fechar ou abrir as portas corretas nos *Security Groups* e *Network ACLs*.
+- **Criptografia:** Escolher ativar a encriptação dos arquivos no S3, discos EBS e dados em trânsito (HTTPS).
+
+---
+
+## 🔄 A Linha de Responsabilidade é Móvel
+A divisão muda dependendo da categoria do serviço utilizado:
+- **Serviços IaaS (Ex: Amazon EC2, EBS):** Você tem o controle total da máquina. Portanto, a responsabilidade pelo sistema operacional, patches e firewall interno da máquina é 100% sua.
+- **Serviços Gerenciados / PaaS (Ex: Amazon RDS, S3, DynamoDB):** A AWS sobe a linha de responsabilidade. Ela assume a atualização do Sistema Operacional, a aplicação de patches do banco de dados e a infraestrutura de rede inferior. A sua responsabilidade fica focada apenas nos dados, na criptografia e nas permissões (IAM).
+
+---
+
+## 🔗 Referência Oficial
+- **Documentação AWS:** [Modelo de Responsabilidade Compartilhada da AWS](https://aws.amazon.com/pt/compliance/shared-responsibility-model/)
+
+
+# 💸 Amazon CloudWatch - Aula 07: Alertas de Faturamento (Billing Alarms)
+
+> 💡 **Foco SAA-C03:** Embora o **AWS Budgets** seja a ferramenta moderna e proativa, a AWS ainda cobra os **CloudWatch Billing Alarms**. A principal diferença para a prova é: O *AWS Budgets* pode prever custos futuros, enquanto o *CloudWatch Billing Alarm* reage aos custos estimados já contabilizados.
+
+## ⚙️ 1. O Pré-requisito (Pegadinha de Prova)
+Antes de criar qualquer alarme no CloudWatch, você precisa avisar a AWS que deseja expor seus dados financeiros para ele.
+- 🧭 **Caminho no Console:** `Conta (Canto superior direito) > Billing and Cost Management > Billing Preferences`
+- **Ação Obrigatória:** Você DEVE marcar a caixa **"Receive Billing Alerts"** (Receber alertas de faturamento). Se não fizer isso, a métrica de dinheiro não vai aparecer no CloudWatch de jeito nenhum.
+
+---
+
+## 🔔 2. Como criar o Alerta (Passo a Passo)
+Os alertas de faturamento são criados dentro do serviço **Amazon CloudWatch**.
+- 🧭 **Caminho no Console:** `CloudWatch > Alarms > Billing > Create alarm`
+- > 🚨 **Dica Crítica (Região):** Os dados de faturamento da AWS são globais, mas ficam hospedados em uma região específica. Para ver ou criar métricas de faturamento no CloudWatch, **você TEM que alterar a sua região no console para N. Virginia (us-east-1)**.
+
+### Configurações Possíveis (O que definir no Alarme)
+
+1. **Métrica e Condições (Thresholds):**
+   - **Métrica:** `EstimatedCharges` (Encargos estimados).
+   - **Moeda:** Sempre em USD (Dólares).
+   - **Condição (Statistic):** Máximo (Maximum) a cada 6 horas (padrão de atualização da AWS).
+   - **Threshold type (Tipo de Limite):** Você escolhe "Estático" (*Static*) e define o operador. *Exemplo:* "Disparar alarme quando o custo for **Maior que (>)** ou **Maior/Igual a (>=)** 10 dólares".
+
+2. **Ações (Actions / Notificações):**
+   - O que o CloudWatch deve fazer quando o alarme mudar para o estado `ALARM`?
+   - **Integração com SNS (Simple Notification Service):** Você deve criar ou selecionar um **Tópico SNS**.
+   - **Endereço:** Você insere o seu e-mail.
+   - *Nota prática:* A AWS enviará um e-mail de confirmação ("Subscription Confirmation"). Se você não clicar no link de confirmação que chegar no seu e-mail, o alerta **não** vai funcionar.
+
+3. **Granularidade (Avançado):**
+   - O alarme padrão mede o *Total Estimated Charge* (Custo Total da Conta).
+   - Porém, você pode criar alarmes granulares. *Exemplo:* Um alarme de US$ 5,00 exclusivo para os gastos do serviço "Amazon EC2" e outro de US$ 2,00 para "Amazon S3".
+
+
+# 💻 Ferramentas de Gerenciamento - Aula 08: AWS CLI e CloudShell
+
+> 💡 **Foco SAA-C03:** Você precisa entender as três formas principais de interagir com a AWS: O **Console Web** (Interface gráfica padrão), a **AWS CLI** (Linha de comando/Scripts) e os **SDKs** (Kits de desenvolvimento para interagir via código fonte em Java, Python, etc).
+
+## ⌨️ 1. AWS CLI (Command Line Interface)
+- **O que é:** Uma ferramenta unificada para gerenciar todos os serviços da AWS usando comandos de texto no terminal da sua máquina (Linux, macOS, Windows).
+- **Vantagem Principal:** **Automação e Repetibilidade**. Permite criar scripts para automatizar tarefas diárias (ex: um script que sobe 10 instâncias EC2 e configura um Load Balancer em poucos segundos).
+- **Como Autenticar (Dica de Prova):**
+  - Para usar o CLI localmente, execute o comando `aws configure`.
+  - Ele pedirá sua **Access Key ID**, **Secret Access Key**, **Região Padrão** (ex: `us-east-1`) e **Formato de Saída** (ex: `json`).
+  - 🚨 *Segurança:* O exame tentará te induzir ao erro sugerindo colocar essas chaves escritas em texto puro dentro do código. A resposta correta é SEMPRE usar Roles (Funções IAM) nas instâncias ou o arquivo local de credenciais. Nunca deixe chaves expostas (hardcoded).
+
+---
+
+## ☁️ 2. AWS CloudShell
+- **O que é:** Terminal de linha de comando que roda **direto no navegador**, embutido no painel web da AWS. 
+- 🧭 **Caminho no Console:** Canto superior direito da tela, no ícone de terminal `>_`.
+
+### 🌟 Por que usar o CloudShell? (Certeza de Prova)
+1. **Ambiente Pronto:** Já vem com AWS CLI, Python, Node.js, Bash e PowerShell instalados.
+2. **Pré-Autenticado:** Você não precisa rodar `aws configure`. O terminal já entra logado com as suas permissões do console web.
+3. **Armazenamento Persistente:** A AWS te dá **1 GB de armazenamento gratuito e persistente** por região no diretório `$HOME`. Arquivos e scripts salvos ali não somem quando você fecha o navegador.
+
+---
+
+## 🛠️ 3. Comandos Úteis (Cheat Sheet Básico)
+A sintaxe padrão de qualquer comando na AWS CLI é sempre: `aws <nome-do-serviço> <ação> [parâmetros]`
+
+### ⚙️ Configuração e Ajuda
+- `aws configure` → Inicia o assistente para configurar suas credenciais e região padrão.
+- `aws <serviço> help` → Mostra o manual de como usar a CLI para um serviço específico (ex: `aws ec2 help`).
+
+### 🪣 Amazon S3
+- `aws s3 ls` → Lista todos os seus buckets.
+- `aws s3 mb s3://meu-novo-bucket` → Cria um novo bucket (*Make Bucket*).
+- `aws s3 cp arquivo.txt s3://meu-bucket/` → Copia um arquivo do seu computador para o S3.
+- `aws s3 sync pasta-local/ s3://meu-bucket/` → Sincroniza uma pasta inteira do PC com o S3 (ótimo para subir sites estáticos).
+
+### 💻 Amazon EC2
+- `aws ec2 describe-instances` → Lista os detalhes de todas as suas instâncias EC2 (estado, IP, tipo).
+- `aws ec2 start-instances --instance-ids i-1234567890abcdef0` → Liga uma instância específica.
+- `aws ec2 stop-instances --instance-ids i-1234567890abcdef0` → Desliga uma instância específica.
+
+### 🔐 AWS IAM
+- `aws iam list-users` → Lista todos os usuários criados na sua conta.
+- `aws iam create-user --user-name Ranon` → Cria um novo usuário no IAM.
+
+
