@@ -52,8 +52,6 @@ A AWS adota a postura de que a nuvem é mais segura que a maioria dos data cente
 
 ## 📈 5. Scalability (Escalabilidade na Prática)
 
-<Image src="image_agent_tag_15093419685002488564" alt="Diagrama comparando blocos empilhados para cima (Escalabilidade Vertical) versus múltiplos blocos lado a lado (Escalabilidade Horizontal)" caption="Vertical (Tamanho) vs. Horizontal (Quantidade)" />
-
 A capacidade do sistema de crescer ou encolher para atender à demanda. Na prova, você precisa saber diferenciar os dois tipos:
 
 ### ⬆️ Escalabilidade Vertical (Scale UP / Scale DOWN)
